@@ -1,3 +1,8 @@
+# Specific File Names
+config.py
+bls_data.db
+Downloaded_Filings
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
