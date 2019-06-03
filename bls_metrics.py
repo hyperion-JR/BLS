@@ -36,19 +36,30 @@ def query_msa_data(msa):
     return data
 
 def yoy(msa, data):
+    d = {}
+    counter = 0
     for k, v in data.items():
         if int(v['year']) > 1997:
             prev_period = v['period']+'-'+str(int(v['year'])-1)
             prev_value = float(data[prev_period]['value'])
             value = float(v['value'])
             YOY = round((value-prev_value)/prev_value, 6)
-            print(m, k, v['value'], data[prev_period]['value'], YOY)
+            d[counter] = pd.Series([counter, m, k, v['value'], data[prev_period]['value'], YOY], 
+                index=['id', 'msa', 'month_year', 'value', 'prev_value', 'change'])
+            counter+=1
+    print(pd.DataFrame(d).T)
+    return pd.DataFrame(d).T
 
-msas = list_of_msas()
-for m in msas[1:]:
-    try:
-        yoy(m, query_msa_data(m))
-    except Exception as e:
-        print(e)
+if __name__ == '__main__':
+    dfs = []
+    msas = list_of_msas()
+    for m in msas[1:]:
+        try:
+            dfs.append(yoy(m, query_msa_data(m)))
+        except Exception as e:
+            print(e)
+    pd.concat(dfs).to_sql('yoy', conn, if_exists='replace')
+    conn.commit()
+    print('Done loading data.')
 
 

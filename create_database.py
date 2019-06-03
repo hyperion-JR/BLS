@@ -22,7 +22,14 @@ def create_earnings_table():
     conn.commit()
     print('Done creating earnings table.')
 
+def create_yoy_table():
+    c.executescript('''DROP TABLE IF EXISTS yoy;''')
+    c.execute('''CREATE TABLE yoy (id, msa, month_year, value, prev_value, change)''')
+    conn.commit()
+    print('Done creating yoy table')
+
 if __name__ == '__main__':
     create_series_names_table()
     create_employee_counts_table()
     create_earnings_table()
+    create_yoy_table()
