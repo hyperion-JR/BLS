@@ -9,7 +9,6 @@ import pandas as pd
 import numpy as np
 
 from config import api_key, api_key2, api_key3
-from all_employees import employee_count_series
 
 conn = sqlite3.connect('bls_data.db')
 c = conn.cursor()
@@ -20,6 +19,18 @@ def total_non_farm():
     series_names_counts = series_names[all_employee_counts]
     total_nonfarm = series_names_counts['industry'] == 'Total Nonfarm'
     return series_total_nonfarm.series_id.unique().tolist()
+
+def employee_count_list():
+    data = []
+    c.execute("""SELECT series_id
+             FROM series_names 
+             WHERE industry = 'Total Nonfarm' 
+             AND datatype = 'All Employees, In Thousands' 
+             AND adjustment_method = 'Not Seasonally Adjusted' 
+             AND area != 'Statewide'""")
+    for i in c:
+        data.append(i[0])
+    return data
 
 def chunks(l, n):
     n = max(1, n)
@@ -47,8 +58,9 @@ def query_employee_counts(series,startyear,endyear):
     return pd.DataFrame(data_dict).T
 
 def get_employee_counts(startyear,endyear):
+    em_cnt_list = employee_count_list()
     ec_list = []
-    for i in employee_count_series:
+    for i in em_cnt_list:
         ec_list.append(i.rstrip())
     dfs = []
     new_list = chunks(ec_list, 50)
@@ -94,5 +106,5 @@ def export_to_excel(data, file_name):
 
 # export_to_excel(get_income_data('weekly_earnings.csv', 2008, 2019), 'Avg Weekly Earnings')
 # export_to_excel(get_employee_counts(2008,2019), 'Employee Counts')
-get_employee_counts(2014,2019)
+get_employee_counts(1997,2019)
 
