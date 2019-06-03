@@ -94,5 +94,5 @@ def export_to_excel(data, file_name):
 
 # export_to_excel(get_income_data('weekly_earnings.csv', 2008, 2019), 'Avg Weekly Earnings')
 # export_to_excel(get_employee_counts(2008,2019), 'Employee Counts')
-get_employee_counts(2008,2019)
+get_employee_counts(2014,2019)
 

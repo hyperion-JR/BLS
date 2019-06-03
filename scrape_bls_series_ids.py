@@ -24,13 +24,13 @@ def scrape_series_ids(state):
     for b in body:
         rows = b.find_all('tr')
         for r in rows:
-            series_id = r.find(attrs={'class':'sub0'}).get_text()
+            series_id = r.find(attrs={'class':'sub0'}).get_text().rstrip()
             area = r.find_all('td')[0].get_text().rstrip()
             industry = r.find_all('td')[1].get_text().rstrip()
             datatype = r.find_all('td')[2].get_text().rstrip()
             adjustment_method = r.find_all('td')[3].get_text().rstrip()
             data[series_id] = pd.Series([series_id,area,industry,datatype,adjustment_method], 
-                index=['series_id','area','industry','datatype','adjusment_method'])
+                index=['series_id','area','industry','datatype','adjustment_method'])
     return pd.DataFrame(data).T
 
 def aggregate_ids():
