@@ -39,7 +39,7 @@ def yoy(msa, data):
     d = {}
     counter = 0
     for k, v in data.items():
-        if int(v['year']) > 1997:
+        if int(v['year']) > 1975:
             prev_period = v['period']+'-'+str(int(v['year'])-1)
             prev_value = float(data[prev_period]['value'])
             value = float(v['value'])
